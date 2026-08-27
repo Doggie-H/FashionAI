@@ -1,0 +1,104 @@
+{
+  "properties": {
+    "try_on_run_id": {
+      "title": "Try On Run Id",
+      "type": "string"
+    },
+    "session_id": {
+      "title": "Session Id",
+      "type": "string"
+    },
+    "decision_run_id": {
+      "title": "Decision Run Id",
+      "type": "string"
+    },
+    "selected_outfit_id": {
+      "title": "Selected Outfit Id",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "requested",
+        "asset_resolution",
+        "binding_validation",
+        "render_queued",
+        "ready",
+        "proxy_fallback",
+        "needs_review",
+        "failed"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "render_mode": {
+      "enum": [
+        "canonical_proxy",
+        "rigged_template",
+        "approved_reconstructed_asset"
+      ],
+      "title": "Render Mode",
+      "type": "string"
+    },
+    "requested_render_mode": {
+      "default": "canonical_proxy",
+      "enum": [
+        "canonical_proxy",
+        "rigged_template",
+        "approved_reconstructed_asset"
+      ],
+      "title": "Requested Render Mode",
+      "type": "string"
+    },
+    "quality_status": {
+      "default": "proxy",
+      "enum": [
+        "approved",
+        "proxy",
+        "pending_review",
+        "rejected",
+        "unavailable"
+      ],
+      "title": "Quality Status",
+      "type": "string"
+    },
+    "asset_bindings": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Asset Bindings",
+      "type": "array"
+    },
+    "limitations": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Limitations",
+      "type": "array"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "updated_at": {
+      "format": "date-time",
+      "title": "Updated At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "try_on_run_id",
+    "session_id",
+    "decision_run_id",
+    "selected_outfit_id",
+    "status",
+    "render_mode",
+    "created_at",
+    "updated_at"
+  ],
+  "title": "TryOnRunV1",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-3d-stylist.local/contracts/workflow_try_on_run_v1.schema.json"
+}

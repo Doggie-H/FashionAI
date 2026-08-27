@@ -1,0 +1,35 @@
+{
+  "cases": 3,
+  "evidence_completeness": 0.6667,
+  "mean_mention_score": 0.8333,
+  "mean_avoidance_score": 1.0,
+  "mean_human_score": 0.0,
+  "rows": [
+    {
+      "case_id": "synthetic-0000",
+      "mention_score": 1.0,
+      "avoidance_score": 1.0,
+      "human_score": null,
+      "evidence_complete": true
+    },
+    {
+      "case_id": "synthetic-0001",
+      "mention_score": 1.0,
+      "avoidance_score": 1.0,
+      "human_score": null,
+      "evidence_complete": true
+    },
+    {
+      "case_id": "synthetic-0002",
+      "mention_score": 0.5,
+      "avoidance_score": 1.0,
+      "human_score": null,
+      "evidence_complete": false
+    }
+  ],
+  "limitations": [
+    "Seed cases are draft until a human reviewer signs off.",
+    "Keyword evidence is not a substitute for semantic or human evaluation.",
+    "Human score must be supplied by an independent reviewer."
+  ]
+}

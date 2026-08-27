@@ -1,0 +1,33 @@
+flowchart TD
+    A[Customer command with actor id and idempotency key] --> B{Processed command exists}
+    B -->|yes| C[Return stored response]
+    B -->|no| D[Validate ownership and state invariant]
+    D --> E[Commit aggregate state and audit event]
+    E --> F[Persist idempotent response]
+
+    E --> G[BodyProfile revision]
+    G --> H[Calibrated]
+    H --> I[User confirmation]
+    I --> J[Active body profile]
+
+    E --> K[WardrobeAsset revision]
+    K --> L[Normalized or pending review]
+    L --> M[Human approval]
+    M --> N[Active wardrobe asset]
+
+    J --> O[StylingSession snapshot]
+    N --> O
+    O --> P[Deterministic outfit decision]
+    P --> Q{Candidates sufficient}
+    Q -->|no| R[Abstained or blocked needs input]
+    Q -->|yes| S[Decision run with evidence and versions]
+    S --> T[User selects outfit]
+    T --> U[TryOnRun]
+    U --> V{Approved rigged resolver available}
+    V -->|no| W[Canonical proxy fallback with limitation]
+    V -->|yes| X[Binding and render quality gates]
+    X --> Y[Approved rendered try on]
+
+    E --> Z[AuditEvent stream]
+    S --> Z
+    U --> Z

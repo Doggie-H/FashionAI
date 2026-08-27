@@ -1,0 +1,54 @@
+# Copy to a provider-owned private config/ConfigMap after replacing every <...> value.
+# Never commit a real model token, bucket name, dataset key, signed URL, or user image path.
+run:
+  run_name: <approved-run-name>
+  seed: 42
+  output_prefix: ai-stylist/fine-tune/runs/<approved-run-name>
+  dry_run_required_before_train: true
+
+model:
+  # Use a model ID only after confirming license, commercial terms, redistribution terms and VLM support.
+  id: <licensed-vlm-model-id>
+  revision: <immutable-model-revision-or-commit>
+  trust_remote_code: false
+  dtype: bfloat16
+
+adapter:
+  method: lora
+  r: 16
+  alpha: 32
+  dropout: 0.05
+  # Must be reviewed against the exact model architecture before a real run.
+  target_modules: [q_proj, k_proj, v_proj, o_proj]
+
+dataset:
+  # Manifest records must be reviewer-approved, user-consented and split by owner/wardrobe.
+  train_manifest_key: ai-stylist/fine-tune/datasets/<dataset-version>/train.jsonl
+  eval_manifest_key: ai-stylist/fine-tune/datasets/<dataset-version>/eval.jsonl
+  dataset_version: <reviewed-dataset-version>
+  local_root: /work/dataset
+  max_records: 0 # 0 means all validated manifest records.
+  require_sha256: true
+
+training:
+  epochs: 1
+  learning_rate: 0.0001
+  per_device_train_batch_size: 1
+  gradient_accumulation_steps: 8
+  gradient_checkpointing: true
+  max_length: null # Preserve image tokens for VLM samples.
+  logging_steps: 5
+  eval_strategy: steps
+  eval_steps: 25
+  save_strategy: steps
+  save_steps: 25
+  save_total_limit: 2
+  warmup_ratio: 0.03
+  report_to: []
+
+acceptance:
+  # Values are release gates set by human reviewers; placeholders intentionally do not authorize a deployment.
+  min_reviewer_win_rate_delta: <defined-after-baseline>
+  max_hard_constraint_violation_rate: 0.0
+  max_unsupported_claim_rate: <defined-after-baseline>
+  require_frozen_holdout: true

@@ -1,0 +1,74 @@
+{
+  "properties": {
+    "actor_id": {
+      "anyOf": [
+        {
+          "exclusiveMinimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Actor Id"
+    },
+    "idempotency_key": {
+      "anyOf": [
+        {
+          "maxLength": 128,
+          "minLength": 12,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Idempotency Key"
+    },
+    "correlation_id": {
+      "anyOf": [
+        {
+          "maxLength": 128,
+          "minLength": 8,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Correlation Id"
+    },
+    "render_mode": {
+      "default": "canonical_proxy",
+      "enum": [
+        "canonical_proxy",
+        "rigged_template",
+        "approved_reconstructed_asset"
+      ],
+      "title": "Render Mode",
+      "type": "string"
+    },
+    "preview_outfit_id": {
+      "anyOf": [
+        {
+          "maxLength": 128,
+          "minLength": 4,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Preview Outfit Id"
+    }
+  },
+  "title": "RequestTryOnCommandV1",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-3d-stylist.local/contracts/workflow_request_try_on_command_v1.schema.json"
+}

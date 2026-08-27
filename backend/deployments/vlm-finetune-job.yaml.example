@@ -1,0 +1,103 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ai-stylist-vlm-finetune-<approved-run-name>
+  labels:
+    app.kubernetes.io/name: ai-stylist
+    app.kubernetes.io/component: vlm-finetune
+    ai-stylist/run-kind: supervised-lora
+spec:
+  backoffLimit: 0
+  ttlSecondsAfterFinished: 604800
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ai-stylist
+        app.kubernetes.io/component: vlm-finetune
+    spec:
+      restartPolicy: Never
+      # Bind workload identity with least privilege: read approved dataset/manifests,
+      # write only the run artifact prefix; never give browser clients this identity.
+      serviceAccountName: ai-stylist-vlm-finetune
+      nodeSelector:
+        workload.ai-stylist/gpu-finetune: "true"
+      containers:
+        - name: trainer
+          image: <registry>/ai-stylist-vlm-finetune:<immutable-image-digest>
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/sh", "-ec"]
+          args:
+            - |
+              python -m vlm_finetune.scripts.preflight_remote_gpu \
+                --config /config/fashion_vlm_lora.yaml \
+                --report /work/reports/preflight.json \
+                --min-vram-gb 24 --require-s3
+              python -m vlm_finetune.scripts.validate_manifest \
+                --train /work/manifests/train.jsonl \
+                --eval /work/manifests/eval.jsonl \
+                --test /work/manifests/test.jsonl \
+                --report /work/reports/manifest-validation.json
+              accelerate launch --config_file /config/accelerate-single-node.yaml \
+                -m vlm_finetune.scripts.train_lora_vlm \
+                --config /config/fashion_vlm_lora.yaml \
+                --prepared-root /work/dataset \
+                --report /work/reports/train-summary.json \
+                --execute
+          envFrom:
+            - secretRef:
+                # Contains only user/provider-supplied HF_TOKEN or equivalent model registry token.
+                name: ai-stylist-vlm-model-access
+          env:
+            - name: RUN_APPROVED
+              value: "1"
+            - name: AI_STYLIST_STORAGE_BACKEND
+              value: "s3"
+            - name: AI_STYLIST_S3_BUCKET
+              valueFrom:
+                configMapKeyRef:
+                  name: ai-stylist-vlm-finetune-config
+                  key: s3-bucket
+            - name: AI_STYLIST_S3_REGION
+              valueFrom:
+                configMapKeyRef:
+                  name: ai-stylist-vlm-finetune-config
+                  key: s3-region
+            - name: AI_STYLIST_S3_ENDPOINT_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: ai-stylist-vlm-finetune-config
+                  key: s3-endpoint-url
+          resources:
+            requests:
+              cpu: "8"
+              memory: "48Gi"
+              nvidia.com/gpu: "1"
+            limits:
+              cpu: "16"
+              memory: "64Gi"
+              nvidia.com/gpu: "1"
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+          volumeMounts:
+            - name: config
+              mountPath: /config
+              readOnly: true
+            - name: work
+              mountPath: /work
+      volumes:
+        - name: config
+          configMap:
+            name: ai-stylist-vlm-finetune-config
+        - name: work
+          emptyDir:
+            sizeLimit: 200Gi
+---
+# Before applying:
+# 1. Replace all <...> placeholders using a reviewed private ConfigMap/image digest.
+# 2. Create ai-stylist-vlm-model-access only from a provider/user-supplied model token.
+# 3. Configure workload identity with a restricted object-store prefix policy.
+# 4. Stage approved train/eval/test manifests into /work/manifests via a controlled init process.
+# 5. Run dry-run preflight + manifest validation and obtain human release approval.
+# This job is a template; it does not prove a provider is configured and does not start training by itself.

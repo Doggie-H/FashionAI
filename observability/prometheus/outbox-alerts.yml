@@ -1,0 +1,62 @@
+groups:
+  - name: ai-stylist-outbox
+    rules:
+      - alert: OutboxDeadLetterEvents
+        expr: ai_stylist_outbox_backlog_events{status="dead_letter"} > 0
+        for: 0m
+        labels:
+          severity: critical
+          service: ai-stylist
+          component: outbox
+        annotations:
+          summary: "Outbox has dead-letter events"
+          description: "{{ $value }} outbox events require operator review or authorized replay."
+          runbook: "docs/OUTBOX_MONITORING_AND_RUNBOOK.md#dead-letter"
+
+      - alert: OutboxBacklogGrowing
+        expr: sum(ai_stylist_outbox_backlog_events{status=~"pending|retry"}) > 100
+        for: 15m
+        labels:
+          severity: warning
+          service: ai-stylist
+          component: outbox
+        annotations:
+          summary: "Outbox backlog remains above normal threshold"
+          description: "Pending plus retry outbox events have remained above 100 for 15 minutes."
+          runbook: "docs/OUTBOX_MONITORING_AND_RUNBOOK.md#backlog"
+
+      - alert: OutboxOldestEventDelayed
+        expr: max(ai_stylist_outbox_oldest_event_age_seconds{status=~"pending|retry|processing"}) > 300
+        for: 10m
+        labels:
+          severity: critical
+          service: ai-stylist
+          component: outbox
+        annotations:
+          summary: "Oldest outstanding outbox event is delayed"
+          description: "An outbox event has been outstanding for more than 5 minutes."
+          runbook: "docs/OUTBOX_MONITORING_AND_RUNBOOK.md#oldest-event-age"
+
+      - alert: OutboxRelayDatabaseErrors
+        expr: increase(ai_stylist_outbox_relay_database_errors_total[5m]) > 0
+        for: 2m
+        labels:
+          severity: critical
+          service: ai-stylist
+          component: outbox
+        annotations:
+          summary: "Outbox relay is observing database errors"
+          description: "Database claim, publish-state update, or metric scrape errors occurred in the last 5 minutes."
+          runbook: "docs/OUTBOX_MONITORING_AND_RUNBOOK.md#database-error"
+
+      - alert: OutboxRetryStorm
+        expr: sum(increase(ai_stylist_outbox_retries_total[10m])) > 25
+        for: 5m
+        labels:
+          severity: warning
+          service: ai-stylist
+          component: outbox
+        annotations:
+          summary: "Outbox publisher retry rate is elevated"
+          description: "More than 25 publish retries occurred over 10 minutes. Inspect Redis/Celery broker reachability."
+          runbook: "docs/OUTBOX_MONITORING_AND_RUNBOOK.md#retry-storm"

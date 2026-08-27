@@ -1,0 +1,430 @@
+{
+  "$defs": {
+    "GarmentImageAnalysisV1": {
+      "properties": {
+        "category": {
+          "enum": [
+            "top",
+            "bottom",
+            "dress",
+            "outerwear",
+            "footwear",
+            "belt",
+            "accessory"
+          ],
+          "title": "Category",
+          "type": "string"
+        },
+        "confidence": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "color_hint": {
+          "anyOf": [
+            {
+              "maxLength": 40,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Color Hint"
+        },
+        "silhouette_hint": {
+          "anyOf": [
+            {
+              "maxLength": 120,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Silhouette Hint"
+        },
+        "needs_human_review": {
+          "title": "Needs Human Review",
+          "type": "boolean"
+        },
+        "limitations": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 8,
+          "title": "Limitations",
+          "type": "array"
+        }
+      },
+      "required": [
+        "category",
+        "confidence",
+        "needs_human_review"
+      ],
+      "title": "GarmentImageAnalysisV1",
+      "type": "object"
+    },
+    "MeshQualityGateV1": {
+      "properties": {
+        "asset_exists": {
+          "title": "Asset Exists",
+          "type": "boolean"
+        },
+        "glb_valid": {
+          "title": "Glb Valid",
+          "type": "boolean"
+        },
+        "skeleton_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Skeleton Id"
+        },
+        "rest_pose": {
+          "anyOf": [
+            {
+              "enum": [
+                "a_pose",
+                "t_pose"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rest Pose"
+        },
+        "anchors_present": {
+          "title": "Anchors Present",
+          "type": "boolean"
+        },
+        "skin_weights_valid": {
+          "title": "Skin Weights Valid",
+          "type": "boolean"
+        },
+        "scale_valid": {
+          "title": "Scale Valid",
+          "type": "boolean"
+        },
+        "bounds_valid": {
+          "title": "Bounds Valid",
+          "type": "boolean"
+        },
+        "intersection_check": {
+          "default": "not_run",
+          "enum": [
+            "not_run",
+            "passed",
+            "failed"
+          ],
+          "title": "Intersection Check",
+          "type": "string"
+        },
+        "review_status": {
+          "default": "pending_review",
+          "enum": [
+            "pending_review",
+            "approved",
+            "rejected"
+          ],
+          "title": "Review Status",
+          "type": "string"
+        },
+        "failure_reasons": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 10,
+          "title": "Failure Reasons",
+          "type": "array"
+        }
+      },
+      "required": [
+        "asset_exists",
+        "glb_valid",
+        "anchors_present",
+        "skin_weights_valid",
+        "scale_valid",
+        "bounds_valid"
+      ],
+      "title": "MeshQualityGateV1",
+      "type": "object"
+    },
+    "ReconstructionStateV1": {
+      "properties": {
+        "pipeline_state": {
+          "default": "imported",
+          "enum": [
+            "imported",
+            "queued",
+            "segmenting",
+            "segmented",
+            "pending_reconstruction",
+            "rigged_template",
+            "failed"
+          ],
+          "title": "Pipeline State",
+          "type": "string"
+        },
+        "job_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Job Id"
+        },
+        "requested_backend": {
+          "default": "garment3dgen_offline",
+          "enum": [
+            "canonical_proxy",
+            "garment3dgen_offline"
+          ],
+          "title": "Requested Backend",
+          "type": "string"
+        },
+        "provider_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Provider Version"
+        },
+        "failure_reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Failure Reason"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "updated_at"
+      ],
+      "title": "ReconstructionStateV1",
+      "type": "object"
+    },
+    "SegmentationArtifactV1": {
+      "properties": {
+        "provider": {
+          "enum": [
+            "rembg",
+            "alpha_fallback"
+          ],
+          "title": "Provider",
+          "type": "string"
+        },
+        "asset_uri": {
+          "pattern": "^/uploads/garment_segments/[^\\s]+$",
+          "title": "Asset Uri",
+          "type": "string"
+        },
+        "has_transparency": {
+          "title": "Has Transparency",
+          "type": "boolean"
+        },
+        "quality": {
+          "enum": [
+            "verified",
+            "unverified"
+          ],
+          "title": "Quality",
+          "type": "string"
+        },
+        "limitations": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 6,
+          "title": "Limitations",
+          "type": "array"
+        },
+        "completed_at": {
+          "format": "date-time",
+          "title": "Completed At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "provider",
+        "asset_uri",
+        "has_transparency",
+        "quality",
+        "completed_at"
+      ],
+      "title": "SegmentationArtifactV1",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "import_id": {
+      "pattern": "^imp_[a-f0-9]{12}$",
+      "title": "Import Id",
+      "type": "string"
+    },
+    "source_image_uri": {
+      "pattern": "^/uploads/garments/[^\\s]+$",
+      "title": "Source Image Uri",
+      "type": "string"
+    },
+    "source_image_sha256": {
+      "pattern": "^[a-f0-9]{64}$",
+      "title": "Source Image Sha256",
+      "type": "string"
+    },
+    "analysis": {
+      "$ref": "#/$defs/GarmentImageAnalysisV1"
+    },
+    "selected_template_id": {
+      "pattern": "^tpl_[a-z0-9_]+$",
+      "title": "Selected Template Id",
+      "type": "string"
+    },
+    "selected_garment_id": {
+      "pattern": "^gar_[a-z0-9_]+$",
+      "title": "Selected Garment Id",
+      "type": "string"
+    },
+    "target_skeleton_id": {
+      "default": "mixamo-humanoid-v1",
+      "title": "Target Skeleton Id",
+      "type": "string"
+    },
+    "rest_pose": {
+      "default": "a_pose",
+      "enum": [
+        "a_pose",
+        "t_pose"
+      ],
+      "title": "Rest Pose",
+      "type": "string"
+    },
+    "rig_status": {
+      "enum": [
+        "canonical_proxy",
+        "rigged_template",
+        "pending_reconstruction",
+        "failed"
+      ],
+      "title": "Rig Status",
+      "type": "string"
+    },
+    "conversion_backend": {
+      "enum": [
+        "canonical_proxy",
+        "garment3dgen_offline"
+      ],
+      "title": "Conversion Backend",
+      "type": "string"
+    },
+    "render_binding": {
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "type": "number"
+          },
+          {
+            "type": "string"
+          }
+        ]
+      },
+      "title": "Render Binding",
+      "type": "object"
+    },
+    "generated_asset_uri": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Generated Asset Uri"
+    },
+    "segmentation": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/SegmentationArtifactV1"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "quality_gate": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/MeshQualityGateV1"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "reconstruction": {
+      "$ref": "#/$defs/ReconstructionStateV1"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "import_id",
+    "source_image_uri",
+    "source_image_sha256",
+    "analysis",
+    "selected_template_id",
+    "selected_garment_id",
+    "rig_status",
+    "conversion_backend",
+    "reconstruction",
+    "created_at"
+  ],
+  "title": "GarmentImportManifestV1",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-3d-stylist.local/contracts/phase_c_garment_import_manifest_v1.schema.json"
+}

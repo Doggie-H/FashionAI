@@ -1,0 +1,351 @@
+{
+  "$defs": {
+    "StyleContextV1": {
+      "description": "Versioned, additive style constraints captured immutably in a StylingSession snapshot.",
+      "properties": {
+        "occasion": {
+          "enum": [
+            "daily",
+            "work",
+            "date",
+            "event",
+            "travel",
+            "formal",
+            "interview",
+            "meeting",
+            "presentation",
+            "celebration",
+            "weekend",
+            "gym",
+            "outdoor",
+            "home",
+            "cocktail",
+            "wedding_guest"
+          ],
+          "title": "Occasion",
+          "type": "string"
+        },
+        "preferred_styles": {
+          "items": {
+            "enum": [
+              "minimal",
+              "classic",
+              "smart_casual",
+              "streetwear",
+              "romantic",
+              "business",
+              "sporty",
+              "quiet_luxury",
+              "preppy",
+              "edgy",
+              "bohemian",
+              "athleisure",
+              "utility",
+              "modest",
+              "resort",
+              "creative",
+              "vintage"
+            ],
+            "type": "string"
+          },
+          "maxItems": 4,
+          "title": "Preferred Styles",
+          "type": "array"
+        },
+        "season": {
+          "default": "all_season",
+          "enum": [
+            "spring",
+            "summer",
+            "autumn",
+            "winter",
+            "all_season"
+          ],
+          "title": "Season",
+          "type": "string"
+        },
+        "fit_preference": {
+          "default": "regular",
+          "enum": [
+            "relaxed",
+            "regular",
+            "tailored",
+            "body_skimming"
+          ],
+          "title": "Fit Preference",
+          "type": "string"
+        },
+        "required_slots": {
+          "items": {
+            "enum": [
+              "base_top",
+              "bottom",
+              "dress",
+              "outerwear",
+              "footwear",
+              "belt",
+              "accessory"
+            ],
+            "type": "string"
+          },
+          "title": "Required Slots",
+          "type": "array"
+        },
+        "excluded_colors": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 5,
+          "title": "Excluded Colors",
+          "type": "array"
+        },
+        "weather": {
+          "default": "unknown",
+          "enum": [
+            "unknown",
+            "hot",
+            "mild",
+            "cold",
+            "rainy",
+            "humid"
+          ],
+          "title": "Weather",
+          "type": "string"
+        },
+        "temperature_c": {
+          "anyOf": [
+            {
+              "maximum": 55,
+              "minimum": -20,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Temperature C"
+        },
+        "mobility_need": {
+          "default": "normal",
+          "enum": [
+            "low",
+            "normal",
+            "high"
+          ],
+          "title": "Mobility Need",
+          "type": "string"
+        },
+        "budget_max": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "maximum": 1000000,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Budget Max"
+        },
+        "modesty_preference": {
+          "default": "standard",
+          "enum": [
+            "standard",
+            "covered",
+            "conservative"
+          ],
+          "title": "Modesty Preference",
+          "type": "string"
+        },
+        "color_goals": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 5,
+          "title": "Color Goals",
+          "type": "array"
+        },
+        "availability_policy": {
+          "default": "owned_only",
+          "enum": [
+            "owned_only",
+            "owned_preferred",
+            "allow_catalog"
+          ],
+          "title": "Availability Policy",
+          "type": "string"
+        },
+        "intent_tags": {
+          "items": {
+            "enum": [
+              "comfort",
+              "all_day",
+              "weather_protection",
+              "photo_ready",
+              "low_maintenance",
+              "packable",
+              "movement",
+              "coverage",
+              "professional_presence",
+              "celebration",
+              "confidence"
+            ],
+            "type": "string"
+          },
+          "maxItems": 5,
+          "title": "Intent Tags",
+          "type": "array"
+        },
+        "formality_target": {
+          "anyOf": [
+            {
+              "enum": [
+                "casual",
+                "smart_casual",
+                "business",
+                "formal",
+                "ceremonial"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Formality Target"
+        },
+        "style_intensity": {
+          "default": "balanced",
+          "enum": [
+            "subtle",
+            "balanced",
+            "statement"
+          ],
+          "title": "Style Intensity",
+          "type": "string"
+        },
+        "optional_slots": {
+          "items": {
+            "enum": [
+              "base_top",
+              "bottom",
+              "dress",
+              "outerwear",
+              "footwear",
+              "belt",
+              "accessory"
+            ],
+            "type": "string"
+          },
+          "maxItems": 4,
+          "title": "Optional Slots",
+          "type": "array"
+        },
+        "avoid_style_tags": {
+          "items": {
+            "enum": [
+              "minimal",
+              "classic",
+              "smart_casual",
+              "streetwear",
+              "romantic",
+              "business",
+              "sporty",
+              "quiet_luxury",
+              "preppy",
+              "edgy",
+              "bohemian",
+              "athleisure",
+              "utility",
+              "modest",
+              "resort",
+              "creative",
+              "vintage"
+            ],
+            "type": "string"
+          },
+          "maxItems": 4,
+          "title": "Avoid Style Tags",
+          "type": "array"
+        }
+      },
+      "required": [
+        "occasion"
+      ],
+      "title": "StyleContextV1",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "actor_id": {
+      "anyOf": [
+        {
+          "exclusiveMinimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Actor Id"
+    },
+    "idempotency_key": {
+      "anyOf": [
+        {
+          "maxLength": 128,
+          "minLength": 12,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Idempotency Key"
+    },
+    "correlation_id": {
+      "anyOf": [
+        {
+          "maxLength": 128,
+          "minLength": 8,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Correlation Id"
+    },
+    "body_profile_id": {
+      "pattern": "^body_[a-f0-9]{12}$",
+      "title": "Body Profile Id",
+      "type": "string"
+    },
+    "context": {
+      "$ref": "#/$defs/StyleContextV1"
+    },
+    "wardrobe_asset_ids": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 50,
+      "title": "Wardrobe Asset Ids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "body_profile_id",
+    "context"
+  ],
+  "title": "CreateStylingSessionCommandV1",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-3d-stylist.local/contracts/workflow_create_styling_session_command_v1.schema.json"
+}

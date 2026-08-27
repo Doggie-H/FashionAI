@@ -1,0 +1,29 @@
+flowchart TD
+  A[User enters body measurements] --> B[Frontend measurement validation]
+  B --> C[POST body contract API]
+  C --> D[Raw measurements contract]
+  D --> E[Parametric body derivation]
+  E --> F[Body contract version one]
+  F --> G[Avatar shape and skeleton binding]
+
+  H[User selects style context] --> I[Occasion style season and fit preference]
+  I --> J[Outfit decision request]
+  F --> J
+
+  K[Canonical garment catalog] --> L[Garment metadata validation]
+  L --> M[Fit range and layer constraints]
+  M --> N[Candidate outfit combinations]
+  J --> N
+
+  O[Optional garment photo import] --> P[Garment import manifest]
+  P --> Q[Canonical template and rig proxy binding]
+  Q --> K
+
+  N --> R[Scoring and compatibility rules]
+  R --> S[Evidence tradeoffs and confidence]
+  S --> T[Outfit decision response]
+  T --> U[Frontend recommendation and 3D preview]
+
+  V[No valid fit or required slot] --> W[Truthful abstention]
+  N --> V
+  W --> T

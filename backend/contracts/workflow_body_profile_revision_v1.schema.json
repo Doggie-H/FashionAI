@@ -1,0 +1,296 @@
+{
+  "$defs": {
+    "BoneLengthScalesV1": {
+      "properties": {
+        "spine": {
+          "maximum": 1.2,
+          "minimum": 0.8,
+          "title": "Spine",
+          "type": "number"
+        },
+        "upper_arm": {
+          "maximum": 1.2,
+          "minimum": 0.8,
+          "title": "Upper Arm",
+          "type": "number"
+        },
+        "lower_arm": {
+          "maximum": 1.2,
+          "minimum": 0.8,
+          "title": "Lower Arm",
+          "type": "number"
+        },
+        "upper_leg": {
+          "maximum": 1.2,
+          "minimum": 0.8,
+          "title": "Upper Leg",
+          "type": "number"
+        },
+        "lower_leg": {
+          "maximum": 1.2,
+          "minimum": 0.8,
+          "title": "Lower Leg",
+          "type": "number"
+        }
+      },
+      "required": [
+        "spine",
+        "upper_arm",
+        "lower_arm",
+        "upper_leg",
+        "lower_leg"
+      ],
+      "title": "BoneLengthScalesV1",
+      "type": "object"
+    },
+    "ParametricBodyContractV1": {
+      "properties": {
+        "contract_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Contract Version",
+          "type": "string"
+        },
+        "body_model_id": {
+          "default": "xbot-prototype-v1",
+          "title": "Body Model Id",
+          "type": "string"
+        },
+        "skeleton_id": {
+          "default": "mixamo-humanoid-v1",
+          "title": "Skeleton Id",
+          "type": "string"
+        },
+        "calibration_version": {
+          "default": "heuristic-v1",
+          "title": "Calibration Version",
+          "type": "string"
+        },
+        "measurements": {
+          "$ref": "#/$defs/RawMeasurementsV1"
+        },
+        "shape_parameters": {
+          "$ref": "#/$defs/ShapeParametersV1"
+        },
+        "bone_length_scales": {
+          "$ref": "#/$defs/BoneLengthScalesV1"
+        },
+        "visual_flags": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 8,
+          "title": "Visual Flags",
+          "type": "array"
+        },
+        "generated_at": {
+          "format": "date-time",
+          "title": "Generated At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "measurements",
+        "shape_parameters",
+        "bone_length_scales",
+        "generated_at"
+      ],
+      "title": "ParametricBodyContractV1",
+      "type": "object"
+    },
+    "RawMeasurementsV1": {
+      "properties": {
+        "height_cm": {
+          "maximum": 230,
+          "minimum": 120,
+          "title": "Height Cm",
+          "type": "number"
+        },
+        "weight_kg": {
+          "maximum": 250,
+          "minimum": 30,
+          "title": "Weight Kg",
+          "type": "number"
+        },
+        "shoulder_cm": {
+          "maximum": 80,
+          "minimum": 25,
+          "title": "Shoulder Cm",
+          "type": "number"
+        },
+        "bust_cm": {
+          "maximum": 180,
+          "minimum": 50,
+          "title": "Bust Cm",
+          "type": "number"
+        },
+        "waist_cm": {
+          "maximum": 180,
+          "minimum": 40,
+          "title": "Waist Cm",
+          "type": "number"
+        },
+        "hip_cm": {
+          "maximum": 200,
+          "minimum": 50,
+          "title": "Hip Cm",
+          "type": "number"
+        },
+        "inseam_cm": {
+          "maximum": 120,
+          "minimum": 45,
+          "title": "Inseam Cm",
+          "type": "number"
+        },
+        "shoulder_slope": {
+          "default": "straight",
+          "enum": [
+            "straight",
+            "sloped"
+          ],
+          "title": "Shoulder Slope",
+          "type": "string"
+        },
+        "chest_profile": {
+          "default": "full",
+          "enum": [
+            "full",
+            "flat"
+          ],
+          "title": "Chest Profile",
+          "type": "string"
+        },
+        "leg_alignment": {
+          "default": "straight",
+          "enum": [
+            "straight",
+            "bowed"
+          ],
+          "title": "Leg Alignment",
+          "type": "string"
+        }
+      },
+      "required": [
+        "height_cm",
+        "weight_kg",
+        "shoulder_cm",
+        "bust_cm",
+        "waist_cm",
+        "hip_cm",
+        "inseam_cm"
+      ],
+      "title": "RawMeasurementsV1",
+      "type": "object"
+    },
+    "ShapeParametersV1": {
+      "properties": {
+        "height_scale": {
+          "maximum": 1.2,
+          "minimum": 0.8,
+          "title": "Height Scale",
+          "type": "number"
+        },
+        "shoulder_scale": {
+          "maximum": 1.35,
+          "minimum": 0.7,
+          "title": "Shoulder Scale",
+          "type": "number"
+        },
+        "chest_scale": {
+          "maximum": 1.35,
+          "minimum": 0.7,
+          "title": "Chest Scale",
+          "type": "number"
+        },
+        "waist_scale": {
+          "maximum": 1.4,
+          "minimum": 0.65,
+          "title": "Waist Scale",
+          "type": "number"
+        },
+        "hip_scale": {
+          "maximum": 1.4,
+          "minimum": 0.7,
+          "title": "Hip Scale",
+          "type": "number"
+        },
+        "leg_scale": {
+          "maximum": 1.2,
+          "minimum": 0.8,
+          "title": "Leg Scale",
+          "type": "number"
+        }
+      },
+      "required": [
+        "height_scale",
+        "shoulder_scale",
+        "chest_scale",
+        "waist_scale",
+        "hip_scale",
+        "leg_scale"
+      ],
+      "title": "ShapeParametersV1",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "profile_id": {
+      "title": "Profile Id",
+      "type": "string"
+    },
+    "owner_id": {
+      "title": "Owner Id",
+      "type": "integer"
+    },
+    "revision": {
+      "minimum": 1,
+      "title": "Revision",
+      "type": "integer"
+    },
+    "status": {
+      "enum": [
+        "draft",
+        "calibrated",
+        "active",
+        "needs_correction",
+        "superseded",
+        "archived"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "contract": {
+      "$ref": "#/$defs/ParametricBodyContractV1"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "confirmed_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Confirmed At"
+    }
+  },
+  "required": [
+    "profile_id",
+    "owner_id",
+    "revision",
+    "status",
+    "contract",
+    "created_at"
+  ],
+  "title": "BodyProfileRevisionV1",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-3d-stylist.local/contracts/workflow_body_profile_revision_v1.schema.json"
+}

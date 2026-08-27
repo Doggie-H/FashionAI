@@ -1,0 +1,34 @@
+flowchart TD
+    A[User intent in UI] --> B[Generate idempotency key once]
+    B --> C[Attach actor identity and correlation ID]
+    C --> D{Processed command exists for actor, type, key}
+    D -->|Yes| E[Return stored response]
+    D -->|No| F[Validate owner, role, state and constraints]
+    F --> G[Create aggregate state snapshot]
+    G --> H[Write audit event and processed command]
+    H --> I[Commit one database transaction]
+    I --> J[Refresh owner scoped query model]
+
+    G --> K[StylingSession]
+    K --> L[Body contract snapshot]
+    K --> M[Wardrobe revision snapshot]
+    K --> N[Context snapshot]
+    K --> O[Catalog and rule version hash]
+    K --> P[Decision run and evidence]
+    P --> Q[User candidate selection]
+    Q --> R[Try-on run with truthful render status]
+    R --> S[Feedback record]
+
+    I --> T[Transactional outbox in P1]
+    T --> U[Celery or reviewer notification]
+    U --> V[ReviewTask OPEN]
+    V --> W{Atomic claim}
+    W -->|Conflict| X[Return current assignee]
+    W -->|Claimed| Y[Reviewer evidence and checklist]
+    Y --> Z{Decision}
+    Z -->|Approve| AA[Activate revision or mark evaluation approved]
+    Z -->|Reject| AB[Reject and retain evidence]
+    Z -->|Rework| AC[Create rework path]
+    AA --> AD[Audit event and UI refresh]
+    AB --> AD
+    AC --> AD

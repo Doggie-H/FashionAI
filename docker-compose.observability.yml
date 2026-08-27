@@ -1,0 +1,56 @@
+services:
+  prometheus:
+    image: prom/prometheus:v3.0.1
+    ports:
+      - "${PROMETHEUS_PORT:-9090}:9090"
+    volumes:
+      - ./observability/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./observability/prometheus/outbox-alerts.yml:/etc/prometheus/rules/outbox-alerts.yml:ro
+      - ${METRICS_TOKEN_FILE:?Set METRICS_TOKEN_FILE to a local file containing the metrics token}:/etc/prometheus/secrets/metrics-token:ro
+      - prometheus-data:/prometheus
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --web.enable-lifecycle
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - alertmanager
+    restart: unless-stopped
+
+  alertmanager:
+    image: prom/alertmanager:v0.28.1
+    ports:
+      - "${ALERTMANAGER_PORT:-9093}:9093"
+    volumes:
+      - ./observability/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+      - ./observability/alertmanager/templates:/etc/alertmanager/templates:ro
+      - ${SLACK_WEBHOOK_URL_FILE:?Set SLACK_WEBHOOK_URL_FILE to a file containing the Slack webhook URL}:/etc/alertmanager/secrets/slack-webhook-url:ro
+      - ${PAGERDUTY_ROUTING_KEY_FILE:?Set PAGERDUTY_ROUTING_KEY_FILE to a file containing the PagerDuty routing key}:/etc/alertmanager/secrets/pagerduty-routing-key:ro
+      - alertmanager-data:/alertmanager
+    command:
+      - --config.file=/etc/alertmanager/alertmanager.yml
+      - --storage.path=/alertmanager
+      - --web.enable-lifecycle
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:11.4.0
+    ports:
+      - "${GRAFANA_PORT:-3001}:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:?Set a non-default Grafana password}
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./observability/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - ./observability/grafana/provisioning:/etc/grafana/provisioning:ro
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+
+volumes:
+  prometheus-data:
+  grafana-data:
+  alertmanager-data:

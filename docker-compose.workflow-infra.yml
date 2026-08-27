@@ -1,0 +1,35 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${WORKFLOW_POSTGRES_DB:-ai_stylist}
+      POSTGRES_USER: ${WORKFLOW_POSTGRES_USER:-ai_stylist}
+      POSTGRES_PASSWORD: ${WORKFLOW_POSTGRES_PASSWORD:?Set a non-default password in .env.workflow}
+    ports:
+      - "${WORKFLOW_POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - workflow-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+  redis:
+    image: redis:7.4-alpine
+    command: ["redis-server", "--appendonly", "yes", "--requirepass", "${WORKFLOW_REDIS_PASSWORD:?Set a non-default password in .env.workflow}"]
+    ports:
+      - "${WORKFLOW_REDIS_PORT:-6379}:6379"
+    volumes:
+      - workflow-redis-data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli --no-auth-warning -a $$WORKFLOW_REDIS_PASSWORD ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+volumes:
+  workflow-postgres-data:
+  workflow-redis-data:

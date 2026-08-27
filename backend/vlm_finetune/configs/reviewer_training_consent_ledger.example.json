@@ -1,0 +1,12 @@
+{
+  "<revision_id>": {
+    "training_allowed": true,
+    "captured_at": "2026-08-27T00:00:00Z",
+    "retention_policy_id": "<approved-retention-policy-id>",
+    "s3_key": "ai-stylist/fine-tune/datasets/<dataset-version>/images/<sha256>.png",
+    "source": {
+      "license_status": "user_consented",
+      "provenance": "<consent-record-or-licensed-source-reference>"
+    }
+  }
+}

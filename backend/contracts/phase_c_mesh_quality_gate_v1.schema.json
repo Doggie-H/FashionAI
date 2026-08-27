@@ -1,0 +1,96 @@
+{
+  "properties": {
+    "asset_exists": {
+      "title": "Asset Exists",
+      "type": "boolean"
+    },
+    "glb_valid": {
+      "title": "Glb Valid",
+      "type": "boolean"
+    },
+    "skeleton_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Skeleton Id"
+    },
+    "rest_pose": {
+      "anyOf": [
+        {
+          "enum": [
+            "a_pose",
+            "t_pose"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Rest Pose"
+    },
+    "anchors_present": {
+      "title": "Anchors Present",
+      "type": "boolean"
+    },
+    "skin_weights_valid": {
+      "title": "Skin Weights Valid",
+      "type": "boolean"
+    },
+    "scale_valid": {
+      "title": "Scale Valid",
+      "type": "boolean"
+    },
+    "bounds_valid": {
+      "title": "Bounds Valid",
+      "type": "boolean"
+    },
+    "intersection_check": {
+      "default": "not_run",
+      "enum": [
+        "not_run",
+        "passed",
+        "failed"
+      ],
+      "title": "Intersection Check",
+      "type": "string"
+    },
+    "review_status": {
+      "default": "pending_review",
+      "enum": [
+        "pending_review",
+        "approved",
+        "rejected"
+      ],
+      "title": "Review Status",
+      "type": "string"
+    },
+    "failure_reasons": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 10,
+      "title": "Failure Reasons",
+      "type": "array"
+    }
+  },
+  "required": [
+    "asset_exists",
+    "glb_valid",
+    "anchors_present",
+    "skin_weights_valid",
+    "scale_valid",
+    "bounds_valid"
+  ],
+  "title": "MeshQualityGateV1",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-3d-stylist.local/contracts/phase_c_mesh_quality_gate_v1.schema.json"
+}

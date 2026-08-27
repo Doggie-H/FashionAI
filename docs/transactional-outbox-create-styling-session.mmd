@@ -1,0 +1,76 @@
+sequenceDiagram
+    autonumber
+    actor Client as Client UI
+    participant API as FastAPI command handler
+    participant Redis as Redis idempotency guard
+    participant PG as PostgreSQL
+    participant OB as workflow_outbox_events
+    participant Publisher as Outbox publisher
+    participant Broker as Celery Redis broker
+    participant Worker as Domain event worker
+
+    Client->>API: POST CreateStylingSession<br/>Idempotency-Key, Correlation-ID
+    API->>API: Resolve authenticated actor and command type
+    API->>PG: SELECT processed command by actor, type, key
+
+    alt Completed command already exists
+        PG-->>API: Stored response and correlation ID
+        API-->>Client: Return original response, no new side effect
+    else No committed command
+        API->>Redis: SET idem lock NX EX
+
+        alt Another request owns in-flight lock
+            Redis-->>API: Lock not acquired
+            API->>PG: Re-read processed command
+            alt Winner committed while waiting
+                PG-->>API: Stored response
+                API-->>Client: Return original response
+            else Winner still running
+                API-->>Client: 409 or 202 Retry-After, same key required
+            end
+        else Lock acquired or Redis optional unavailable
+            API->>PG: BEGIN
+            API->>PG: Validate active body profile and active wardrobe revisions
+            API->>PG: INSERT styling_sessions with immutable snapshots
+            API->>PG: INSERT workflow_audit_events
+            API->>PG: INSERT processed_workflow_commands unique actor/type/key
+            API->>OB: INSERT StylingSessionOpened.v1 status pending
+            Note over PG,OB: Aggregate, audit, command response and outbox event share one transaction
+            API->>PG: COMMIT
+
+            alt Unique command conflict at commit
+                PG-->>API: IntegrityError on uq_workflow_command_idempotency
+                API->>PG: ROLLBACK then SELECT winning command
+                PG-->>API: Stored response
+                API-->>Client: Return original response
+            else Commit succeeds
+                API->>Redis: Cache committed response with TTL
+                API->>Redis: Release in-flight lock safely
+                API-->>Client: 201 StylingSession response
+            end
+        end
+    end
+
+    loop Background publisher after commit
+        Publisher->>PG: Claim pending events FOR UPDATE SKIP LOCKED
+        PG-->>Publisher: Locked outbox event batch
+        Publisher->>PG: Mark events processing and increment attempt
+        Publisher->>PG: COMMIT claim
+        Publisher->>Broker: send_task event payload and event ID
+
+        alt Broker accepted message
+            Broker-->>Publisher: Accepted
+            Publisher->>PG: Mark outbox event published with timestamp
+        else Broker temporarily fails
+            Publisher->>PG: Schedule retry with exponential backoff and last error
+        end
+    end
+
+    Broker->>Worker: Deliver StylingSessionOpened.v1
+    Worker->>PG: INSERT processed_event_deliveries unique consumer/event
+    alt Delivery already handled
+        PG-->>Worker: Unique conflict means no-op
+    else First delivery
+        Worker->>Worker: Run idempotent downstream action
+        Worker->>PG: Mark delivery completed and commit
+    end

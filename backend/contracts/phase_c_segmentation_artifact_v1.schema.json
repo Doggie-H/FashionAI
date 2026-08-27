@@ -1,0 +1,53 @@
+{
+  "properties": {
+    "provider": {
+      "enum": [
+        "rembg",
+        "alpha_fallback"
+      ],
+      "title": "Provider",
+      "type": "string"
+    },
+    "asset_uri": {
+      "pattern": "^/uploads/garment_segments/[^\\s]+$",
+      "title": "Asset Uri",
+      "type": "string"
+    },
+    "has_transparency": {
+      "title": "Has Transparency",
+      "type": "boolean"
+    },
+    "quality": {
+      "enum": [
+        "verified",
+        "unverified"
+      ],
+      "title": "Quality",
+      "type": "string"
+    },
+    "limitations": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 6,
+      "title": "Limitations",
+      "type": "array"
+    },
+    "completed_at": {
+      "format": "date-time",
+      "title": "Completed At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "provider",
+    "asset_uri",
+    "has_transparency",
+    "quality",
+    "completed_at"
+  ],
+  "title": "SegmentationArtifactV1",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-3d-stylist.local/contracts/phase_c_segmentation_artifact_v1.schema.json"
+}

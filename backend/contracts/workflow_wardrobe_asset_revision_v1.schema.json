@@ -1,0 +1,125 @@
+{
+  "properties": {
+    "asset_id": {
+      "title": "Asset Id",
+      "type": "string"
+    },
+    "revision_id": {
+      "title": "Revision Id",
+      "type": "string"
+    },
+    "owner_id": {
+      "title": "Owner Id",
+      "type": "integer"
+    },
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "category": {
+      "enum": [
+        "top",
+        "bottom",
+        "dress",
+        "outerwear",
+        "footwear",
+        "belt",
+        "accessory"
+      ],
+      "title": "Category",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "image_received",
+        "normalized",
+        "pending_review",
+        "active",
+        "rejected",
+        "archived"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "import_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Import Id"
+    },
+    "canonical_garment_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Canonical Garment Id"
+    },
+    "quality_summary": {
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "number"
+          },
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "title": "Quality Summary",
+      "type": "object"
+    },
+    "render_contract": {
+      "additionalProperties": true,
+      "title": "Render Contract",
+      "type": "object"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "approved_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Approved At"
+    }
+  },
+  "required": [
+    "asset_id",
+    "revision_id",
+    "owner_id",
+    "name",
+    "category",
+    "status",
+    "created_at"
+  ],
+  "title": "WardrobeAssetRevisionV1",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-3d-stylist.local/contracts/workflow_wardrobe_asset_revision_v1.schema.json"
+}

@@ -1,0 +1,18 @@
+{{ define "ai_stylist.title" -}}
+[{{ .Status | toUpper }}] {{ .CommonLabels.alertname }} — {{ .CommonLabels.service }}
+{{- end }}
+
+{{ define "ai_stylist.body" -}}
+*Severity:* {{ .CommonLabels.severity }}
+*Component:* {{ .CommonLabels.component }}
+*Alerts:* {{ len .Alerts.Firing }} firing, {{ len .Alerts.Resolved }} resolved
+{{ range .Alerts -}}
+• *{{ .Labels.alertname }}*: {{ .Annotations.summary }}
+  {{ .Annotations.description }}
+  Runbook: {{ .Annotations.runbook }}
+{{ end -}}
+{{- end }}
+
+{{ define "ai_stylist.pagerduty_description" -}}
+{{ range .Alerts.Firing }}{{ .Labels.alertname }}: {{ .Annotations.summary }}. {{ .Annotations.description }} {{ end }}
+{{- end }}

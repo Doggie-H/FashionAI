@@ -1,0 +1,265 @@
+{
+  "$defs": {
+    "DecisionEvidenceV1": {
+      "properties": {
+        "rule_id": {
+          "title": "Rule Id",
+          "type": "string"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        },
+        "score_delta": {
+          "title": "Score Delta",
+          "type": "number"
+        }
+      },
+      "required": [
+        "rule_id",
+        "message",
+        "score_delta"
+      ],
+      "title": "DecisionEvidenceV1",
+      "type": "object"
+    },
+    "OutfitCandidateV1": {
+      "properties": {
+        "outfit_id": {
+          "title": "Outfit Id",
+          "type": "string"
+        },
+        "garment_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Garment Ids",
+          "type": "array"
+        },
+        "total_score": {
+          "title": "Total Score",
+          "type": "number"
+        },
+        "confidence": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "constraints_satisfied": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Constraints Satisfied",
+          "type": "array"
+        },
+        "tradeoffs": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tradeoffs",
+          "type": "array"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/DecisionEvidenceV1"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "needs_user_confirmation": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Needs User Confirmation",
+          "type": "array"
+        },
+        "style_archetypes": {
+          "items": {
+            "enum": [
+              "minimal",
+              "classic",
+              "smart_casual",
+              "streetwear",
+              "romantic",
+              "business",
+              "sporty",
+              "quiet_luxury",
+              "preppy",
+              "edgy",
+              "bohemian",
+              "athleisure",
+              "utility",
+              "modest",
+              "resort",
+              "creative",
+              "vintage"
+            ],
+            "type": "string"
+          },
+          "title": "Style Archetypes",
+          "type": "array"
+        },
+        "style_story": {
+          "default": "",
+          "title": "Style Story",
+          "type": "string"
+        },
+        "functional_highlights": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Functional Highlights",
+          "type": "array"
+        }
+      },
+      "required": [
+        "outfit_id",
+        "garment_ids",
+        "total_score",
+        "confidence",
+        "constraints_satisfied",
+        "tradeoffs",
+        "evidence",
+        "needs_user_confirmation"
+      ],
+      "title": "OutfitCandidateV1",
+      "type": "object"
+    },
+    "OutfitDecisionResponseV1": {
+      "properties": {
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "decision_id": {
+          "title": "Decision Id",
+          "type": "string"
+        },
+        "catalog_version": {
+          "title": "Catalog Version",
+          "type": "string"
+        },
+        "candidates": {
+          "items": {
+            "$ref": "#/$defs/OutfitCandidateV1"
+          },
+          "title": "Candidates",
+          "type": "array"
+        },
+        "abstained": {
+          "title": "Abstained",
+          "type": "boolean"
+        },
+        "abstention_reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Abstention Reason"
+        },
+        "score_breakdown": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "title": "Score Breakdown",
+          "type": "object"
+        },
+        "rejected_candidates": {
+          "items": {
+            "$ref": "#/$defs/RejectedCandidateV1"
+          },
+          "title": "Rejected Candidates",
+          "type": "array"
+        }
+      },
+      "required": [
+        "decision_id",
+        "catalog_version",
+        "candidates",
+        "abstained"
+      ],
+      "title": "OutfitDecisionResponseV1",
+      "type": "object"
+    },
+    "RejectedCandidateV1": {
+      "properties": {
+        "candidate_key": {
+          "title": "Candidate Key",
+          "type": "string"
+        },
+        "reason_code": {
+          "title": "Reason Code",
+          "type": "string"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        }
+      },
+      "required": [
+        "candidate_key",
+        "reason_code",
+        "message"
+      ],
+      "title": "RejectedCandidateV1",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "decision_run_id": {
+      "title": "Decision Run Id",
+      "type": "string"
+    },
+    "session_id": {
+      "title": "Session Id",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "ready",
+        "abstained",
+        "failed"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "decision": {
+      "$ref": "#/$defs/OutfitDecisionResponseV1"
+    },
+    "catalog_version": {
+      "title": "Catalog Version",
+      "type": "string"
+    },
+    "rule_version": {
+      "title": "Rule Version",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "decision_run_id",
+    "session_id",
+    "status",
+    "decision",
+    "catalog_version",
+    "rule_version",
+    "created_at"
+  ],
+  "title": "OutfitDecisionRunV1",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-3d-stylist.local/contracts/workflow_outfit_decision_run_v1.schema.json"
+}

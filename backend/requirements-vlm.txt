@@ -1,0 +1,8 @@
+# Install a PyTorch build matching the machine's CUDA/CPU target first.
+transformers>=4.49.0
+accelerate>=1.2.0
+peft>=0.14.0
+safetensors>=0.5.0
+qwen-vl-utils>=0.0.10
+# Optional GPU acceleration; install only when supported by the CUDA/toolchain.
+# flash-attn>=2.7.0

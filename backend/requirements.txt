@@ -1,0 +1,11 @@
+fastapi==0.109.2
+uvicorn==0.27.1
+pydantic==2.6.1
+sqlalchemy==2.0.25
+psycopg2-binary==2.9.9
+python-multipart==0.0.9
+rembg==2.0.53
+Pillow==10.2.0
+faiss-cpu==1.7.4
+numpy==1.26.4
+google-genai==0.3.0

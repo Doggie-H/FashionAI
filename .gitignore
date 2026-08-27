@@ -1,0 +1,61 @@
+# Local credentials and observability secret-file mounts
+.metrics-token
+.slack-webhook-url
+.pagerduty-routing-key
+*.secret
+*.secrets
+.env
+.env.*
+!.env.example
+!.env.workflow.example
+!observability/alertmanager/.env.alertmanager.example
+
+# Local/demo load-test artifacts
+backend/locust_smoke.db
+backend/load_tests/artifacts/
+*.csv
+
+# Local Python/Node environments and caches
+.venv/
+**/__pycache__/
+*.py[cod]
+node_modules/
+**/.next/
+
+# Local data, user uploads, databases and generated model artifacts
+data/
+uploads/
+models/
+trained_ai_stylist/
+backend/uploads/
+backend/wardrobe.db
+backend/*.db
+backend/reports/
+
+# Runtime logs and local process state
+.logs/
+*.log
+*.pid
+
+# VLM/private run inputs and outputs
+vlm_finetune/prepared/
+vlm_finetune/private/
+*.safetensors
+*.bin
+*.ckpt
+*.pt
+*.pth
+
+# OS/editor metadata
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Local demo inputs and raw tooling reports
+temp_gradio_upload.jpg
+backend-demo.err.log
+backend-demo.out.log
+run.log
+web/*.log
+web/npm-audit*.json

@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ai-stylist-garment-gpu-worker
+  labels:
+    app.kubernetes.io/name: ai-stylist
+    app.kubernetes.io/component: garment-gpu-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ai-stylist
+      app.kubernetes.io/component: garment-gpu-worker
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ai-stylist
+        app.kubernetes.io/component: garment-gpu-worker
+    spec:
+      # Bind this account to a cloud workload identity with only the required S3 prefix permissions.
+      serviceAccountName: ai-stylist-gpu-worker
+      # Match a node label managed by the platform team; do not schedule on the 4 GB local demo GPU.
+      nodeSelector:
+        workload.ai-stylist/gpu-reconstruction: "true"
+      containers:
+        - name: garment-gpu-worker
+          image: <registry>/ai-stylist-backend:<immutable-image-tag>
+          imagePullPolicy: IfNotPresent
+          command: ["celery", "-A", "app.queue.celery_app", "worker", "-Q", "garment_gpu", "-n", "garment-gpu@%h", "--concurrency=1", "--loglevel=INFO"]
+          envFrom:
+            - secretRef:
+                name: ai-stylist-runtime
+          env:
+            - name: AI_STYLIST_STORAGE_BACKEND
+              value: "s3"
+            - name: AI_STYLIST_S3_KEY_PREFIX
+              value: "ai-stylist"
+            - name: GARMENT_RECONSTRUCTION_MIN_VRAM_GB
+              value: "12"
+          resources:
+            requests:
+              cpu: "4"
+              memory: "16Gi"
+              nvidia.com/gpu: "1"
+            limits:
+              cpu: "8"
+              memory: "32Gi"
+              nvidia.com/gpu: "1"
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}
+---
+# This template assumes an NVIDIA-enabled Kubernetes cluster. It does not implement
+# a reconstruction provider adapter. Until such an adapter is licensed and tested,
+# process_garment_reconstruction correctly returns pending_reconstruction.

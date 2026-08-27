@@ -1,0 +1,575 @@
+{
+  "$defs": {
+    "GarmentAssetV1": {
+      "properties": {
+        "template_id": {
+          "pattern": "^tpl_[a-z0-9_]+$",
+          "title": "Template Id",
+          "type": "string"
+        },
+        "asset_uri": {
+          "pattern": "^(https?://|/)[^\\s]+$",
+          "title": "Asset Uri",
+          "type": "string"
+        },
+        "compatible_skeleton_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Compatible Skeleton Ids",
+          "type": "array"
+        },
+        "rest_pose": {
+          "default": "a_pose",
+          "enum": [
+            "t_pose",
+            "a_pose"
+          ],
+          "title": "Rest Pose",
+          "type": "string"
+        },
+        "anchors": {
+          "items": {
+            "enum": [
+              "shoulder",
+              "chest",
+              "waist",
+              "hip",
+              "left_foot",
+              "right_foot"
+            ],
+            "type": "string"
+          },
+          "title": "Anchors",
+          "type": "array"
+        },
+        "supports_body_fit": {
+          "default": true,
+          "title": "Supports Body Fit",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "template_id",
+        "asset_uri",
+        "compatible_skeleton_ids"
+      ],
+      "title": "GarmentAssetV1",
+      "type": "object"
+    },
+    "GarmentFitProfileV1": {
+      "properties": {
+        "fit_intent": {
+          "enum": [
+            "relaxed",
+            "regular",
+            "tailored",
+            "body_skimming"
+          ],
+          "title": "Fit Intent",
+          "type": "string"
+        },
+        "min_bust_cm": {
+          "anyOf": [
+            {
+              "maximum": 180,
+              "minimum": 50,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Min Bust Cm"
+        },
+        "max_bust_cm": {
+          "anyOf": [
+            {
+              "maximum": 180,
+              "minimum": 50,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Bust Cm"
+        },
+        "min_waist_cm": {
+          "anyOf": [
+            {
+              "maximum": 180,
+              "minimum": 40,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Min Waist Cm"
+        },
+        "max_waist_cm": {
+          "anyOf": [
+            {
+              "maximum": 180,
+              "minimum": 40,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Waist Cm"
+        },
+        "min_hip_cm": {
+          "anyOf": [
+            {
+              "maximum": 200,
+              "minimum": 50,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Min Hip Cm"
+        },
+        "max_hip_cm": {
+          "anyOf": [
+            {
+              "maximum": 200,
+              "minimum": 50,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Hip Cm"
+        }
+      },
+      "required": [
+        "fit_intent"
+      ],
+      "title": "GarmentFitProfileV1",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "garment_id": {
+      "pattern": "^gar_[a-z0-9_]+$",
+      "title": "Garment Id",
+      "type": "string"
+    },
+    "name": {
+      "maxLength": 120,
+      "minLength": 2,
+      "title": "Name",
+      "type": "string"
+    },
+    "category": {
+      "enum": [
+        "top",
+        "bottom",
+        "dress",
+        "outerwear",
+        "footwear",
+        "belt",
+        "accessory"
+      ],
+      "title": "Category",
+      "type": "string"
+    },
+    "layer_slot": {
+      "enum": [
+        "base_top",
+        "bottom",
+        "dress",
+        "outerwear",
+        "footwear",
+        "belt",
+        "accessory"
+      ],
+      "title": "Layer Slot",
+      "type": "string"
+    },
+    "styles": {
+      "items": {
+        "enum": [
+          "minimal",
+          "classic",
+          "smart_casual",
+          "streetwear",
+          "romantic",
+          "business",
+          "sporty",
+          "quiet_luxury",
+          "preppy",
+          "edgy",
+          "bohemian",
+          "athleisure",
+          "utility",
+          "modest",
+          "resort",
+          "creative",
+          "vintage"
+        ],
+        "type": "string"
+      },
+      "maxItems": 6,
+      "minItems": 1,
+      "title": "Styles",
+      "type": "array"
+    },
+    "occasions": {
+      "items": {
+        "enum": [
+          "daily",
+          "work",
+          "date",
+          "event",
+          "travel",
+          "formal",
+          "interview",
+          "meeting",
+          "presentation",
+          "celebration",
+          "weekend",
+          "gym",
+          "outdoor",
+          "home",
+          "cocktail",
+          "wedding_guest"
+        ],
+        "type": "string"
+      },
+      "maxItems": 6,
+      "minItems": 1,
+      "title": "Occasions",
+      "type": "array"
+    },
+    "seasons": {
+      "items": {
+        "enum": [
+          "spring",
+          "summer",
+          "autumn",
+          "winter",
+          "all_season"
+        ],
+        "type": "string"
+      },
+      "maxItems": 5,
+      "minItems": 1,
+      "title": "Seasons",
+      "type": "array"
+    },
+    "color_family": {
+      "enum": [
+        "neutral",
+        "black",
+        "white",
+        "navy",
+        "earth",
+        "burgundy",
+        "emerald",
+        "bright"
+      ],
+      "title": "Color Family",
+      "type": "string"
+    },
+    "material": {
+      "maxLength": 80,
+      "minLength": 2,
+      "title": "Material",
+      "type": "string"
+    },
+    "silhouette": {
+      "maxLength": 120,
+      "minLength": 2,
+      "title": "Silhouette",
+      "type": "string"
+    },
+    "proportion_effects": {
+      "items": {
+        "enum": [
+          "elongate_legs",
+          "structure_shoulders",
+          "define_waist",
+          "soften_shoulders",
+          "straighten_leg_line",
+          "add_chest_dimension"
+        ],
+        "type": "string"
+      },
+      "title": "Proportion Effects",
+      "type": "array"
+    },
+    "compatible_with": {
+      "items": {
+        "enum": [
+          "top",
+          "bottom",
+          "dress",
+          "outerwear",
+          "footwear",
+          "belt",
+          "accessory"
+        ],
+        "type": "string"
+      },
+      "title": "Compatible With",
+      "type": "array"
+    },
+    "fit_profile": {
+      "$ref": "#/$defs/GarmentFitProfileV1"
+    },
+    "asset": {
+      "$ref": "#/$defs/GarmentAssetV1"
+    },
+    "status": {
+      "default": "active",
+      "enum": [
+        "active",
+        "draft",
+        "archived"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "source": {
+      "default": "canonical_seed",
+      "enum": [
+        "canonical_seed",
+        "user_import",
+        "ai_generated"
+      ],
+      "title": "Source",
+      "type": "string"
+    },
+    "price": {
+      "anyOf": [
+        {
+          "maximum": 1000000,
+          "minimum": 0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Price"
+    },
+    "weather_suitability": {
+      "items": {
+        "enum": [
+          "hot",
+          "mild",
+          "cold",
+          "rainy",
+          "humid"
+        ],
+        "type": "string"
+      },
+      "maxItems": 5,
+      "title": "Weather Suitability",
+      "type": "array"
+    },
+    "mobility_support": {
+      "default": "normal",
+      "enum": [
+        "low",
+        "normal",
+        "high"
+      ],
+      "title": "Mobility Support",
+      "type": "string"
+    },
+    "modesty_level": {
+      "default": "standard",
+      "enum": [
+        "standard",
+        "covered",
+        "conservative"
+      ],
+      "title": "Modesty Level",
+      "type": "string"
+    },
+    "formality_level": {
+      "default": "smart_casual",
+      "enum": [
+        "casual",
+        "smart_casual",
+        "business",
+        "formal",
+        "ceremonial"
+      ],
+      "title": "Formality Level",
+      "type": "string"
+    },
+    "statement_level": {
+      "default": "balanced",
+      "enum": [
+        "subtle",
+        "balanced",
+        "statement"
+      ],
+      "title": "Statement Level",
+      "type": "string"
+    },
+    "intent_support": {
+      "items": {
+        "enum": [
+          "comfort",
+          "all_day",
+          "weather_protection",
+          "photo_ready",
+          "low_maintenance",
+          "packable",
+          "movement",
+          "coverage",
+          "professional_presence",
+          "celebration",
+          "confidence"
+        ],
+        "type": "string"
+      },
+      "maxItems": 8,
+      "title": "Intent Support",
+      "type": "array"
+    },
+    "care_level": {
+      "default": "moderate",
+      "enum": [
+        "easy",
+        "moderate",
+        "special"
+      ],
+      "title": "Care Level",
+      "type": "string"
+    },
+    "color_role": {
+      "default": "supporting",
+      "enum": [
+        "neutral_base",
+        "accent",
+        "statement",
+        "supporting"
+      ],
+      "title": "Color Role",
+      "type": "string"
+    },
+    "occasion_notes": {
+      "anyOf": [
+        {
+          "maxLength": 220,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Occasion Notes"
+    },
+    "style_notes": {
+      "anyOf": [
+        {
+          "maxLength": 220,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Style Notes"
+    },
+    "pairing_hints": {
+      "items": {
+        "enum": [
+          "minimal",
+          "classic",
+          "smart_casual",
+          "streetwear",
+          "romantic",
+          "business",
+          "sporty",
+          "quiet_luxury",
+          "preppy",
+          "edgy",
+          "bohemian",
+          "athleisure",
+          "utility",
+          "modest",
+          "resort",
+          "creative",
+          "vintage"
+        ],
+        "type": "string"
+      },
+      "maxItems": 6,
+      "title": "Pairing Hints",
+      "type": "array"
+    },
+    "avoid_pairing_with": {
+      "items": {
+        "enum": [
+          "minimal",
+          "classic",
+          "smart_casual",
+          "streetwear",
+          "romantic",
+          "business",
+          "sporty",
+          "quiet_luxury",
+          "preppy",
+          "edgy",
+          "bohemian",
+          "athleisure",
+          "utility",
+          "modest",
+          "resort",
+          "creative",
+          "vintage"
+        ],
+        "type": "string"
+      },
+      "maxItems": 6,
+      "title": "Avoid Pairing With",
+      "type": "array"
+    }
+  },
+  "required": [
+    "garment_id",
+    "name",
+    "category",
+    "layer_slot",
+    "styles",
+    "occasions",
+    "seasons",
+    "color_family",
+    "material",
+    "silhouette",
+    "fit_profile",
+    "asset"
+  ],
+  "title": "GarmentMetadataV1",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-3d-stylist.local/contracts/garment_metadata_v1.schema.json"
+}

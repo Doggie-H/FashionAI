@@ -1,0 +1,562 @@
+{
+  "$defs": {
+    "BoneLengthScalesV1": {
+      "properties": {
+        "spine": {
+          "maximum": 1.2,
+          "minimum": 0.8,
+          "title": "Spine",
+          "type": "number"
+        },
+        "upper_arm": {
+          "maximum": 1.2,
+          "minimum": 0.8,
+          "title": "Upper Arm",
+          "type": "number"
+        },
+        "lower_arm": {
+          "maximum": 1.2,
+          "minimum": 0.8,
+          "title": "Lower Arm",
+          "type": "number"
+        },
+        "upper_leg": {
+          "maximum": 1.2,
+          "minimum": 0.8,
+          "title": "Upper Leg",
+          "type": "number"
+        },
+        "lower_leg": {
+          "maximum": 1.2,
+          "minimum": 0.8,
+          "title": "Lower Leg",
+          "type": "number"
+        }
+      },
+      "required": [
+        "spine",
+        "upper_arm",
+        "lower_arm",
+        "upper_leg",
+        "lower_leg"
+      ],
+      "title": "BoneLengthScalesV1",
+      "type": "object"
+    },
+    "ParametricBodyContractV1": {
+      "properties": {
+        "contract_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Contract Version",
+          "type": "string"
+        },
+        "body_model_id": {
+          "default": "xbot-prototype-v1",
+          "title": "Body Model Id",
+          "type": "string"
+        },
+        "skeleton_id": {
+          "default": "mixamo-humanoid-v1",
+          "title": "Skeleton Id",
+          "type": "string"
+        },
+        "calibration_version": {
+          "default": "heuristic-v1",
+          "title": "Calibration Version",
+          "type": "string"
+        },
+        "measurements": {
+          "$ref": "#/$defs/RawMeasurementsV1"
+        },
+        "shape_parameters": {
+          "$ref": "#/$defs/ShapeParametersV1"
+        },
+        "bone_length_scales": {
+          "$ref": "#/$defs/BoneLengthScalesV1"
+        },
+        "visual_flags": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 8,
+          "title": "Visual Flags",
+          "type": "array"
+        },
+        "generated_at": {
+          "format": "date-time",
+          "title": "Generated At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "measurements",
+        "shape_parameters",
+        "bone_length_scales",
+        "generated_at"
+      ],
+      "title": "ParametricBodyContractV1",
+      "type": "object"
+    },
+    "RawMeasurementsV1": {
+      "properties": {
+        "height_cm": {
+          "maximum": 230,
+          "minimum": 120,
+          "title": "Height Cm",
+          "type": "number"
+        },
+        "weight_kg": {
+          "maximum": 250,
+          "minimum": 30,
+          "title": "Weight Kg",
+          "type": "number"
+        },
+        "shoulder_cm": {
+          "maximum": 80,
+          "minimum": 25,
+          "title": "Shoulder Cm",
+          "type": "number"
+        },
+        "bust_cm": {
+          "maximum": 180,
+          "minimum": 50,
+          "title": "Bust Cm",
+          "type": "number"
+        },
+        "waist_cm": {
+          "maximum": 180,
+          "minimum": 40,
+          "title": "Waist Cm",
+          "type": "number"
+        },
+        "hip_cm": {
+          "maximum": 200,
+          "minimum": 50,
+          "title": "Hip Cm",
+          "type": "number"
+        },
+        "inseam_cm": {
+          "maximum": 120,
+          "minimum": 45,
+          "title": "Inseam Cm",
+          "type": "number"
+        },
+        "shoulder_slope": {
+          "default": "straight",
+          "enum": [
+            "straight",
+            "sloped"
+          ],
+          "title": "Shoulder Slope",
+          "type": "string"
+        },
+        "chest_profile": {
+          "default": "full",
+          "enum": [
+            "full",
+            "flat"
+          ],
+          "title": "Chest Profile",
+          "type": "string"
+        },
+        "leg_alignment": {
+          "default": "straight",
+          "enum": [
+            "straight",
+            "bowed"
+          ],
+          "title": "Leg Alignment",
+          "type": "string"
+        }
+      },
+      "required": [
+        "height_cm",
+        "weight_kg",
+        "shoulder_cm",
+        "bust_cm",
+        "waist_cm",
+        "hip_cm",
+        "inseam_cm"
+      ],
+      "title": "RawMeasurementsV1",
+      "type": "object"
+    },
+    "ShapeParametersV1": {
+      "properties": {
+        "height_scale": {
+          "maximum": 1.2,
+          "minimum": 0.8,
+          "title": "Height Scale",
+          "type": "number"
+        },
+        "shoulder_scale": {
+          "maximum": 1.35,
+          "minimum": 0.7,
+          "title": "Shoulder Scale",
+          "type": "number"
+        },
+        "chest_scale": {
+          "maximum": 1.35,
+          "minimum": 0.7,
+          "title": "Chest Scale",
+          "type": "number"
+        },
+        "waist_scale": {
+          "maximum": 1.4,
+          "minimum": 0.65,
+          "title": "Waist Scale",
+          "type": "number"
+        },
+        "hip_scale": {
+          "maximum": 1.4,
+          "minimum": 0.7,
+          "title": "Hip Scale",
+          "type": "number"
+        },
+        "leg_scale": {
+          "maximum": 1.2,
+          "minimum": 0.8,
+          "title": "Leg Scale",
+          "type": "number"
+        }
+      },
+      "required": [
+        "height_scale",
+        "shoulder_scale",
+        "chest_scale",
+        "waist_scale",
+        "hip_scale",
+        "leg_scale"
+      ],
+      "title": "ShapeParametersV1",
+      "type": "object"
+    },
+    "StyleContextV1": {
+      "description": "Versioned, additive style constraints captured immutably in a StylingSession snapshot.",
+      "properties": {
+        "occasion": {
+          "enum": [
+            "daily",
+            "work",
+            "date",
+            "event",
+            "travel",
+            "formal",
+            "interview",
+            "meeting",
+            "presentation",
+            "celebration",
+            "weekend",
+            "gym",
+            "outdoor",
+            "home",
+            "cocktail",
+            "wedding_guest"
+          ],
+          "title": "Occasion",
+          "type": "string"
+        },
+        "preferred_styles": {
+          "items": {
+            "enum": [
+              "minimal",
+              "classic",
+              "smart_casual",
+              "streetwear",
+              "romantic",
+              "business",
+              "sporty",
+              "quiet_luxury",
+              "preppy",
+              "edgy",
+              "bohemian",
+              "athleisure",
+              "utility",
+              "modest",
+              "resort",
+              "creative",
+              "vintage"
+            ],
+            "type": "string"
+          },
+          "maxItems": 4,
+          "title": "Preferred Styles",
+          "type": "array"
+        },
+        "season": {
+          "default": "all_season",
+          "enum": [
+            "spring",
+            "summer",
+            "autumn",
+            "winter",
+            "all_season"
+          ],
+          "title": "Season",
+          "type": "string"
+        },
+        "fit_preference": {
+          "default": "regular",
+          "enum": [
+            "relaxed",
+            "regular",
+            "tailored",
+            "body_skimming"
+          ],
+          "title": "Fit Preference",
+          "type": "string"
+        },
+        "required_slots": {
+          "items": {
+            "enum": [
+              "base_top",
+              "bottom",
+              "dress",
+              "outerwear",
+              "footwear",
+              "belt",
+              "accessory"
+            ],
+            "type": "string"
+          },
+          "title": "Required Slots",
+          "type": "array"
+        },
+        "excluded_colors": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 5,
+          "title": "Excluded Colors",
+          "type": "array"
+        },
+        "weather": {
+          "default": "unknown",
+          "enum": [
+            "unknown",
+            "hot",
+            "mild",
+            "cold",
+            "rainy",
+            "humid"
+          ],
+          "title": "Weather",
+          "type": "string"
+        },
+        "temperature_c": {
+          "anyOf": [
+            {
+              "maximum": 55,
+              "minimum": -20,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Temperature C"
+        },
+        "mobility_need": {
+          "default": "normal",
+          "enum": [
+            "low",
+            "normal",
+            "high"
+          ],
+          "title": "Mobility Need",
+          "type": "string"
+        },
+        "budget_max": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "maximum": 1000000,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Budget Max"
+        },
+        "modesty_preference": {
+          "default": "standard",
+          "enum": [
+            "standard",
+            "covered",
+            "conservative"
+          ],
+          "title": "Modesty Preference",
+          "type": "string"
+        },
+        "color_goals": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 5,
+          "title": "Color Goals",
+          "type": "array"
+        },
+        "availability_policy": {
+          "default": "owned_only",
+          "enum": [
+            "owned_only",
+            "owned_preferred",
+            "allow_catalog"
+          ],
+          "title": "Availability Policy",
+          "type": "string"
+        },
+        "intent_tags": {
+          "items": {
+            "enum": [
+              "comfort",
+              "all_day",
+              "weather_protection",
+              "photo_ready",
+              "low_maintenance",
+              "packable",
+              "movement",
+              "coverage",
+              "professional_presence",
+              "celebration",
+              "confidence"
+            ],
+            "type": "string"
+          },
+          "maxItems": 5,
+          "title": "Intent Tags",
+          "type": "array"
+        },
+        "formality_target": {
+          "anyOf": [
+            {
+              "enum": [
+                "casual",
+                "smart_casual",
+                "business",
+                "formal",
+                "ceremonial"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Formality Target"
+        },
+        "style_intensity": {
+          "default": "balanced",
+          "enum": [
+            "subtle",
+            "balanced",
+            "statement"
+          ],
+          "title": "Style Intensity",
+          "type": "string"
+        },
+        "optional_slots": {
+          "items": {
+            "enum": [
+              "base_top",
+              "bottom",
+              "dress",
+              "outerwear",
+              "footwear",
+              "belt",
+              "accessory"
+            ],
+            "type": "string"
+          },
+          "maxItems": 4,
+          "title": "Optional Slots",
+          "type": "array"
+        },
+        "avoid_style_tags": {
+          "items": {
+            "enum": [
+              "minimal",
+              "classic",
+              "smart_casual",
+              "streetwear",
+              "romantic",
+              "business",
+              "sporty",
+              "quiet_luxury",
+              "preppy",
+              "edgy",
+              "bohemian",
+              "athleisure",
+              "utility",
+              "modest",
+              "resort",
+              "creative",
+              "vintage"
+            ],
+            "type": "string"
+          },
+          "maxItems": 4,
+          "title": "Avoid Style Tags",
+          "type": "array"
+        }
+      },
+      "required": [
+        "occasion"
+      ],
+      "title": "StyleContextV1",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "body": {
+      "$ref": "#/$defs/ParametricBodyContractV1"
+    },
+    "context": {
+      "$ref": "#/$defs/StyleContextV1"
+    },
+    "candidate_garment_ids": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 50,
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Candidate Garment Ids"
+    },
+    "owned_garment_ids": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 50,
+      "title": "Owned Garment Ids",
+      "type": "array"
+    },
+    "top_k": {
+      "default": 3,
+      "maximum": 5,
+      "minimum": 1,
+      "title": "Top K",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "body",
+    "context"
+  ],
+  "title": "OutfitDecisionRequestV1",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-3d-stylist.local/contracts/outfit_decision_request_v1.schema.json"
+}

@@ -1,0 +1,142 @@
+{
+  "$defs": {
+    "RawMeasurementsV1": {
+      "properties": {
+        "height_cm": {
+          "maximum": 230,
+          "minimum": 120,
+          "title": "Height Cm",
+          "type": "number"
+        },
+        "weight_kg": {
+          "maximum": 250,
+          "minimum": 30,
+          "title": "Weight Kg",
+          "type": "number"
+        },
+        "shoulder_cm": {
+          "maximum": 80,
+          "minimum": 25,
+          "title": "Shoulder Cm",
+          "type": "number"
+        },
+        "bust_cm": {
+          "maximum": 180,
+          "minimum": 50,
+          "title": "Bust Cm",
+          "type": "number"
+        },
+        "waist_cm": {
+          "maximum": 180,
+          "minimum": 40,
+          "title": "Waist Cm",
+          "type": "number"
+        },
+        "hip_cm": {
+          "maximum": 200,
+          "minimum": 50,
+          "title": "Hip Cm",
+          "type": "number"
+        },
+        "inseam_cm": {
+          "maximum": 120,
+          "minimum": 45,
+          "title": "Inseam Cm",
+          "type": "number"
+        },
+        "shoulder_slope": {
+          "default": "straight",
+          "enum": [
+            "straight",
+            "sloped"
+          ],
+          "title": "Shoulder Slope",
+          "type": "string"
+        },
+        "chest_profile": {
+          "default": "full",
+          "enum": [
+            "full",
+            "flat"
+          ],
+          "title": "Chest Profile",
+          "type": "string"
+        },
+        "leg_alignment": {
+          "default": "straight",
+          "enum": [
+            "straight",
+            "bowed"
+          ],
+          "title": "Leg Alignment",
+          "type": "string"
+        }
+      },
+      "required": [
+        "height_cm",
+        "weight_kg",
+        "shoulder_cm",
+        "bust_cm",
+        "waist_cm",
+        "hip_cm",
+        "inseam_cm"
+      ],
+      "title": "RawMeasurementsV1",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "actor_id": {
+      "anyOf": [
+        {
+          "exclusiveMinimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Actor Id"
+    },
+    "idempotency_key": {
+      "anyOf": [
+        {
+          "maxLength": 128,
+          "minLength": 12,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Idempotency Key"
+    },
+    "correlation_id": {
+      "anyOf": [
+        {
+          "maxLength": 128,
+          "minLength": 8,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Correlation Id"
+    },
+    "measurements": {
+      "$ref": "#/$defs/RawMeasurementsV1"
+    }
+  },
+  "required": [
+    "measurements"
+  ],
+  "title": "CreateBodyProfileCommandV1",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-3d-stylist.local/contracts/workflow_create_body_profile_command_v1.schema.json"
+}

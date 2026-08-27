@@ -1,0 +1,67 @@
+{
+  "uid": "ai-stylist-outbox",
+  "title": "AI Stylist — Transactional Outbox",
+  "tags": ["ai-stylist", "outbox", "workflow"],
+  "timezone": "utc",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "15s",
+  "time": {"from": "now-6h", "to": "now"},
+  "templating": {"list": [{"name": "datasource", "type": "datasource", "query": "prometheus", "current": {"text": "Prometheus", "value": "${DS_PROMETHEUS}"}}]},
+  "panels": [
+    {
+      "id": 1,
+      "type": "timeseries",
+      "title": "Outstanding Outbox Backlog by Status",
+      "datasource": "${datasource}",
+      "gridPos": {"x": 0, "y": 0, "w": 12, "h": 8},
+      "targets": [{"expr": "sum by (status) (ai_stylist_outbox_backlog_events)", "legendFormat": "{{status}}"}],
+      "fieldConfig": {"defaults": {"unit": "short", "min": 0}, "overrides": []}
+    },
+    {
+      "id": 2,
+      "type": "timeseries",
+      "title": "Oldest Outstanding Event Age",
+      "datasource": "${datasource}",
+      "gridPos": {"x": 12, "y": 0, "w": 12, "h": 8},
+      "targets": [{"expr": "max by (status) (ai_stylist_outbox_oldest_event_age_seconds)", "legendFormat": "{{status}}"}],
+      "fieldConfig": {"defaults": {"unit": "s", "min": 0, "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}, {"color": "orange", "value": 120}, {"color": "red", "value": 300}]}}, "overrides": []}
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "Dead-letter Events",
+      "datasource": "${datasource}",
+      "gridPos": {"x": 0, "y": 8, "w": 6, "h": 5},
+      "targets": [{"expr": "sum(ai_stylist_outbox_backlog_events{status=\"dead_letter\"})", "legendFormat": "dead-letter"}],
+      "fieldConfig": {"defaults": {"unit": "short", "min": 0, "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}, {"color": "red", "value": 1}]}}, "overrides": []}
+    },
+    {
+      "id": 4,
+      "type": "timeseries",
+      "title": "Publish Retries per 5 Minutes",
+      "datasource": "${datasource}",
+      "gridPos": {"x": 6, "y": 8, "w": 9, "h": 5},
+      "targets": [{"expr": "sum(increase(ai_stylist_outbox_retries_total[5m]))", "legendFormat": "retries"}],
+      "fieldConfig": {"defaults": {"unit": "short", "min": 0}, "overrides": []}
+    },
+    {
+      "id": 5,
+      "type": "timeseries",
+      "title": "Relay Database Errors per 5 Minutes",
+      "datasource": "${datasource}",
+      "gridPos": {"x": 15, "y": 8, "w": 9, "h": 5},
+      "targets": [{"expr": "sum by (operation) (increase(ai_stylist_outbox_relay_database_errors_total[5m]))", "legendFormat": "{{operation}}"}],
+      "fieldConfig": {"defaults": {"unit": "short", "min": 0}, "overrides": []}
+    },
+    {
+      "id": 6,
+      "type": "timeseries",
+      "title": "Publisher Outcome Rate",
+      "datasource": "${datasource}",
+      "gridPos": {"x": 0, "y": 13, "w": 24, "h": 8},
+      "targets": [{"expr": "sum by (outcome) (rate(ai_stylist_outbox_publish_attempts_total[5m]))", "legendFormat": "{{outcome}}"}],
+      "fieldConfig": {"defaults": {"unit": "ops", "min": 0}, "overrides": []}
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+flowchart TD
+    A[User submits garment image] --> B[POST garment imports]
+    B --> C[Validate MIME extension bytes size and pixels]
+    C -->|valid| D[Persist source image and manifest]
+    C -->|invalid| E[HTTP 422 validation error]
+    D --> F[Canonical proxy binding for immediate preview]
+    D --> G[POST reconstruct]
+    G --> H[Celery task routed to garment GPU queue]
+    H --> I[GPU worker marks segmenting]
+    I --> J[Segmentation provider]
+    J --> K[Persist PNG mask artifact and segmentation quality]
+    K --> L[GPU and runtime preflight]
+    L -->|not eligible| M[pending reconstruction with reason]
+    L -->|eligible| N[Offline reconstruction provider]
+    N --> O[Mesh quality gate]
+    O -->|asset skeleton rest pose anchors weights scale bounds intersections review pass| P[rigged template asset]
+    O -->|missing evidence or failure| Q[pending reconstruction or failed]
+    P --> R[Avatar loads approved rigged garment]
+    F --> S[Avatar shows canonical category proxy]
+    M --> S
+    Q --> S
